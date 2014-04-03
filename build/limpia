@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# Eliminar ficheros con extension .LST
+for FILE in `ls *.lst`
+do
+	rm $FILE
+	echo $0: eliminando fichero $FILE
+done
+
+# Eliminar ficheros con extension .REL
+for FILE in `ls *.rel`
+do
+	rm $FILE
+	echo $0: eliminando fichero $FILE
+done
+
+# Eliminar ficheros con extension .MAP
+for FILE in `ls *.map`
+do
+	rm $FILE
+	echo $0: eliminando fichero $FILE
+done
+
+# Eliminar ficheros con extension .RST
+for FILE in `ls *.rst`
+do
+	rm $FILE
+	echo $0: eliminando fichero $FILE
+done
+
+# Eliminar ficheros con extension .S19
+for FILE in `ls *.s19`
+do
+	rm $FILE
+	echo $0: eliminando fichero $FILE
+done
+

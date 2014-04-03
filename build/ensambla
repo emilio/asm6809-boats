@@ -1,0 +1,132 @@
+#!/bin/bash
+FILES=$*
+FILEJOINED=
+OPT_AS=
+OPT_LINK=
+OPT_RUN=
+DIR=$(dirname $0)
+BIN_DIR="$DIR/../bin"
+
+if [ $# -eq 0 ]; then
+
+	# Llamada simple a la shell 'ensambla'
+	echo $0": Error de sintaxis"
+	echo "Modo de empleo: ensambla [-d] fichero1 fichero2 ..." 
+	echo
+	echo " Opciones: "
+	echo "   -d Activa el modo depuracion del emulador (opcional)"
+	echo
+	echo
+	echo "   Teclee el nombre del fichero/s sin la extensión (.asm). "
+	echo "   Si el proyecto se compone de varios ficheros fuente el  "
+	echo "   ejecutable tomara el nombre del primero de la lista."
+
+	exit 0
+
+elif [ $# -eq 1 ] && [ -f $1.asm ]; then
+	
+	# Llamada a la shell 'ensambla' con un fichero .asm
+        echo "ensambla > Opciones de depuracion desactivadas"
+
+	OPT_AS="-o -l"
+	OPT_LINK="-s"
+	OPT_RUN="-C"
+
+	FILEJOINED=$1
+
+elif [ $# -eq 2 ] && [ $1 = "-d" ] && [ -f $2.asm ]; then
+
+	# Llamada a la shell 'ensambla' con un fichero .asm y con la 
+	# opcion -d (modo depuracion)
+        echo "ensambla > Opciones de depuracion activadas"
+
+	OPT_AS="-a -o -l"
+	OPT_LINK="-s -m -w"
+	OPT_RUN="-C -d"
+
+	FILEJOINED=$2
+
+elif [ "x$1" = "x-d" ]; then
+
+	# Llamada a la shell 'ensambla' con varios ficheros .asm, donde
+	# el primero debe ser el programa principal y el resto
+	# bibliotecas de subrutinas. Ademas se ha especificado la
+	# opcion -d (modo depuracion).
+	echo "ensambla > Opciones de depuracion activadas"
+	echo "ensambla > Detectadas " $# " bibliotecas"
+	
+	OPT_AS="-a -o -l"
+	OPT_LINK="-s -m -w -u"
+	OPT_RUN="-C -d"
+
+	FILEJOINED=$2
+
+else
+
+	# Llamada a la shell 'ensambla' con varios ficheros .asm, donde
+	# el primero debe ser el programa principal y el resto
+	# bibliotecas de subrutinas. 
+	echo "ensambla > Opciones de depuracion desactivadas"
+	echo "ensambla > " $# " modulos detectados"
+
+	OPT_AS="-o -l"
+	OPT_LINK="-s -m -w -u"
+	OPT_RUN="-C"
+	
+	FILEJOINED=$1
+
+fi
+
+############################################################################
+# Fase de ensamblado
+############################################################################
+for FILE in $FILES
+do
+	# Avanzamos uno en caso de estar activado el mode depuracion
+	if [ $FILE = "-d" ]; then
+		continue
+	fi
+
+	echo "ensambla > Ensamblando... "$FILE".asm"
+	"$DIR/as6809" $OPT_AS "$BIN_DIR/$FILE" "$FILE.asm"
+
+	if [ $? -gt 0 ]; then
+		echo "ensambla > Errores en la fase de ensamblado"
+		exit 1
+	fi
+done
+
+
+############################################################################
+# Fase de enlazado
+############################################################################
+for FILE in $FILES
+do
+	# Avanzamos uno en caso de estar activado el mode depuracion
+	if [ $FILE = "-d" ]; then
+		continue
+	fi
+
+	if [ -f "$BIN_DIR/$FILE.rel" ]; then
+		RELFILES=`echo $RELFILES $BIN_DIR/$FILE.rel`
+	else
+		echo "ensambla > Falta el fichero $BIN_DIR/$FILE.rel"
+		exit 1
+	fi
+done
+
+echo "ensambla > Enlazando/reuniendo... $RELFILES"
+"$DIR/aslink" $OPT_LINK "$BIN_DIR/$FILEJOINED.s19" $RELFILES
+
+if [ $? -gt 0 ]; then
+	echo "ensambla > Errores en la fase de enlazado/reunion"
+	exit 1
+fi
+
+############################################################################
+# Fase de ejecución
+############################################################################
+if [ -f "$BIN_DIR/$FILEJOINED.s19" ]; then
+	echo "ensambla > Ejecutando...$BIN_DIR/$FILEJOINED.s19"
+	"$DIR/m6809-run" $OPT_RUN "$BIN_DIR/$FILEJOINED.s19"
+fi

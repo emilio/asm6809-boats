@@ -1,0 +1,6 @@
+#!/bin/sh
+if [ "x$1" = "x-d" ]; then
+	"./build/ensambla" -d main IO presentation game_io
+else
+	"./build/ensambla" main IO presentation game_io
+fi
