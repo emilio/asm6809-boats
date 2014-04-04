@@ -98,15 +98,15 @@ game_print_row_mask_end:
 			stb	TEMP_BYTE
 
 			lda	SOLVED
-			beq	game_print_char_method_solved
+			beq	game_print_char_method_current
 
-			pulu	a
-			jsr	choose_uchar
-			bra 	game_print_char_method_end
-
-game_print_char_method_solved:
 			pulu	a
 			jsr	choose_char
+			bra 	game_print_char_method_end
+
+game_print_char_method_current:
+			pulu	a
+			jsr	choose_uchar
 
 game_print_char_method_end:
 			stb	STDOUT

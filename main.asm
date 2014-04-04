@@ -53,7 +53,7 @@ PROGRAM_START:
 			ldu #0xFF00 ; init user stack
 			jsr presentation
 			jsr game_print_map_solved
-			jsr game_print_map_current
+			; jsr game_print_map_current
 
 PROGRAM_END:
 			clra
