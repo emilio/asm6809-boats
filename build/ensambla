@@ -84,15 +84,15 @@ for FILE in $FILES
 do
 	# Avanzamos uno en caso de estar activado el mode depuracion
 	if [ $FILE = "-d" ]; then
-		continue
+	continue
 	fi
 
 	echo "ensambla > Ensamblando... "$FILE".asm"
 	"$DIR/as6809" $OPT_AS "$BIN_DIR/$FILE" "$FILE.asm"
 
 	if [ $? -gt 0 ]; then
-		echo "ensambla > Errores en la fase de ensamblado"
-		exit 1
+	echo "ensambla > Errores en la fase de ensamblado"
+	exit 1
 	fi
 done
 
@@ -104,14 +104,14 @@ for FILE in $FILES
 do
 	# Avanzamos uno en caso de estar activado el mode depuracion
 	if [ $FILE = "-d" ]; then
-		continue
+	continue
 	fi
 
 	if [ -f "$BIN_DIR/$FILE.rel" ]; then
-		RELFILES=`echo $RELFILES $BIN_DIR/$FILE.rel`
+	RELFILES=`echo $RELFILES $BIN_DIR/$FILE.rel`
 	else
-		echo "ensambla > Falta el fichero $BIN_DIR/$FILE.rel"
-		exit 1
+	echo "ensambla > Falta el fichero $BIN_DIR/$FILE.rel"
+	exit 1
 	fi
 done
 
