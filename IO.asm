@@ -23,7 +23,7 @@
 STDIN			.equ 0xFF02 ; keyboard
 STDOUT			.equ 0xFF00 ; screen
 
-INPUT_END		.equ #'\n
+INPUT_END		.equ #10 ; \n
 
 
 ;   +--------------------------------------------+
@@ -157,6 +157,7 @@ lreads_loop:
 			beq	lreads_end
 
 			stb	,x+
+			deca
 			bra	lreads_loop
 lreads_end:
 			ldb	#0

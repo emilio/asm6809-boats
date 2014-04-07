@@ -11,8 +11,7 @@
 ;   		.include 	"presentation.asm"
 ;   		.include 	"game.asm"
 			.globl	presentation
-			.globl	game_print_map_solved
-			.globl	game_print_map_current
+			.globl	game_loop
 			.globl	FIELD
 			.globl	USER_FIELD
 
@@ -52,8 +51,7 @@ USER_FIELD:
 PROGRAM_START:
 			ldu #0xFF00 ; init user stack
 			jsr presentation
-			jsr game_print_map_solved
-			; jsr game_print_map_current
+			jsr game_loop
 
 PROGRAM_END:
 			clra
