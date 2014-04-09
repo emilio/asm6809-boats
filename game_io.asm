@@ -31,7 +31,18 @@ GAME_SOLVED_STR:	.ascii "\nHAS RESUELTO EL JUEGO!\n\n"
 
 GAME_SURRENDER_STR:	.ascii "\nTE HAS RENDIDO\n\n"
 			.byte 0
-; 3 bits for answer
+
+GAME_SHOOT_COUNT_BEFORE_STR:
+			.ascii "\nHas necesitado "
+			.byte 0
+
+GAME_SHOOT_COUNT_AFTER_STR:
+			.ascii " tiradas\n"
+			.byte 0
+
+GAME_SHOOT_COUNT:	.byte 0
+
+; 3 bits for answer (q if quit, position if not)
 GAME_ANSWER:		.byte 0
 			.byte 0
 			.byte 0
@@ -270,10 +281,13 @@ game_shoot:
 			ldx	#USER_FIELD ; get the map
 			jsr	int_to_mask ; generate the correct mask
 
+
 			ldb	a, x ; get the row
 
 			orb	TEMP_BYTE ; apply the mask to the row, enabling the bit
 			stb	a, x ; and store it again
+
+			inc	GAME_SHOOT_COUNT
 
 			pulu	a,b,x
 			rts
@@ -359,6 +373,26 @@ game_is_solved_end:
 			pulu	b, x, y
 			rts
 
+;   +--------------------------------------------+
+;   |            game_print_shoot_count          |
+;   +--------------------------------------------+
+;   | Print the shoot count                      |
+;   +--------------------------------------------+
+game_print_shoot_count:
+			pshu	a
+
+			ldx	#GAME_SHOOT_COUNT_BEFORE_STR
+			jsr	print
+
+			lda	GAME_SHOOT_COUNT
+			adda	#'0
+			sta	STDOUT
+
+			ldx	#GAME_SHOOT_COUNT_AFTER_STR
+			jsr	print
+
+			pulu	a
+			rts
 
 ;   +--------------------------------------------+
 ;   |                 game_solved                |
@@ -367,8 +401,10 @@ game_is_solved_end:
 ;   +--------------------------------------------+
 game_solved:
 			jsr	game_print_map_solved
+
 			ldx	#GAME_SOLVED_STR
 			jsr	print
+			jsr	game_print_shoot_count
 			rts
 
 ;   +--------------------------------------------+
@@ -380,4 +416,5 @@ game_surrender:
 			jsr	game_print_map_solved
 			ldx	#GAME_SURRENDER_STR
 			jsr	print
+			jsr	game_print_shoot_count
 			rts
