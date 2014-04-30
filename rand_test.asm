@@ -1,10 +1,10 @@
-STDIN			.equ 0xFF02 ; keyboard
-STDOUT			.equ 0xFF00 ; screen
-PROGRAM_END_CELL	.equ 0xFF01
-			.area PROG(ABS)
-			.org 0x0300
-			.globl PROGRAM_START
-			.globl rand
+PROGRAM_END_CELL	.equ	0xFF01
+			.area	PROG(ABS)
+			.org	0x0300
+			.globl	PROGRAM_START
+			.globl	rand
+			.globl	usrand
+			.globl	STDOUT
 
 ; Prints the hex letter corresponding to the register a
 ; a must be between 0 and 15
@@ -29,11 +29,14 @@ print_num:
 			pshu	a
 			pshu	a
 
+			; IMPORTANT: SET CARRY to 0 (if not bit gets roll'd)
+			; OR do asr instead
+
 			anda	#0xF0
-			rora
-			rora
-			rora
-			rora
+			lsra
+			lsra
+			lsra
+			lsra
 			jsr	print_hex_letter
 
 			pulu	a
@@ -48,14 +51,16 @@ print_num:
 
 
 PROGRAM_START:
-			ldu #0xFF00 ; init user stack
-			lda	#0xC3
-			jsr	print_num
+			ldu	#0xFF00 ; init user stack
+			jsr	usrand
+
 			ldb	#8
 bucle:
 			decb
 			beq	PROGRAM_END			
 			jsr	rand
+			; make number between 0 and 7
+			anda	#0x07
 			jsr	print_num
 			lda	#'\n
 			sta	STDOUT
