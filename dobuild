@@ -1,6 +1,6 @@
 #!/bin/sh
 if [ "x$1" = "x-d" ]; then
-	"./build/ensambla" -d main IO presentation game_io game_loop
+	"./build/ensambla" -d main IO presentation game_io game_loop rand
 else
-	"./build/ensambla" main IO presentation game_io game_loop
+	"./build/ensambla" main IO presentation game_io game_loop rand
 fi
