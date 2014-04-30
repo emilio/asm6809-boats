@@ -16,8 +16,8 @@
 			.globl	USER_FIELD
 
 PROGRAM_END_CELL	.equ 0xFF01
-			.area PROG(ABS)
-			.org 0x0300
+;			.area PROG(ABS)
+;			.org 0x0300
 			.globl PROGRAM_START
 
 ;--------------------------+
@@ -56,5 +56,6 @@ PROGRAM_START:
 PROGRAM_END:
 			clra
 			sta PROGRAM_END_CELL
+			.area PR_END(ABS)
 			.org 0xFFFE
 			.word PROGRAM_START
