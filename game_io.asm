@@ -5,6 +5,7 @@
 ;   +--------------------------------------------+
 
 			.module	flota_io
+			.globl	game_generate_map
 			.globl	game_print_map_solved
 			.globl	game_print_map_current
 			.globl	game_ask
@@ -17,6 +18,8 @@
 			.globl	print
 			.globl	lreads
 			.globl	STDOUT
+			.globl	usrand
+			.globl	rand
 
 
 ;---------------+
@@ -90,6 +93,16 @@ int_to_mask_end:
 			; store mask in TEMP_BYTE
 			stb	TEMP_BYTE
 			pulu	a,b
+			rts
+
+;   +--------------------------------------------+
+;   |              game_generate_map             |
+;   +--------------------------------------------+
+;   | Generates the map randomly                 |
+;   +--------------------------------------------+
+game_generate_map:
+			jsr	usrand
+			; TODO: get number of boats & randomize them
 			rts
 
 ;   +--------------------------------------------+
