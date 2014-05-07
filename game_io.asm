@@ -85,7 +85,7 @@ int_to_mask:
 int_to_mask_loop:
 			cmpa	#0
 			beq	int_to_mask_end
-			rolb
+			lslb
 			deca
 			bra	int_to_mask_loop
 
