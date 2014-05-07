@@ -26,7 +26,9 @@
 ;   READ-ONLY   |
 ;---------------+
 
-GAME_ASK_STR:		.ascii "Casilla o q para rendirse: "
+BOATS_NUM:		.byte 4 ; Number of boats
+
+GAME_ASK_STR:		.ascii "\nCasilla o q para rendirse: "
 			.byte 0
 
 GAME_SOLVED_STR:	.ascii "\nHAS RESUELTO EL JUEGO!\n\n"
@@ -43,13 +45,6 @@ GAME_SHOOT_COUNT_AFTER_STR:
 			.ascii " tiradas\n"
 			.byte 0
 
-GAME_SHOOT_COUNT:	.byte 0
-
-; 3 bits for answer (q if quit, position if not)
-GAME_ANSWER:		.byte 0
-			.byte 0
-			.byte 0
-
 GAME_UNKNOWN_CHAR:	.byte	#'-
 GAME_WATER_CHAR:	.byte	#'~
 GAME_BOAT_CHAR:		.byte	#'x
@@ -57,6 +52,13 @@ GAME_BOAT_CHAR:		.byte	#'x
 ;----------------+
 ;   READ-WRITE   |
 ;----------------+
+GAME_SHOOT_COUNT:	.byte 0
+
+; 3 bits for answer (q if quit, position if not)
+GAME_ANSWER:		.byte 0
+			.byte 0
+			.byte 0
+
 TEMP_BYTE:		.byte 0
 GPMSOLVED:		.byte 0
 
@@ -100,9 +102,97 @@ int_to_mask_end:
 ;   +--------------------------------------------+
 ;   | Generates the map randomly                 |
 ;   +--------------------------------------------+
+;   | @modifies TEMP_BYTE                        |
+;   +--------------------------------------------+
 game_generate_map:
 			jsr	usrand
 			; TODO: get number of boats & randomize them
+			pshu	a,b,x
+			ldx	#FIELD
+			ldb	BOATS_NUM
+			incb
+
+game_generate_map_boat:
+			decb
+			beq	game_generate_map_end ; while(--b)...
+			pshu	b
+
+			jsr	rand ; store random number in a
+			anda	#0x07 ; make it between 0 and 7
+
+			sta	TEMP_BYTE; move it to b
+			ldb	TEMP_BYTE
+
+			jsr	rand ; now we keep it in a
+			anda	#0x07
+
+			ldx	#FIELD
+			jsr	game_shoot
+
+; for debugging
+game_generate_map_boat_second:
+			; TODO: get the second boat part
+			pshu	a
+
+			; We pick a number between 0 and 3 // , and store it in TEMP_BYTE
+			jsr	rand
+			anda	0x03
+			; sta	TEMP_BYTE
+			; 0 => top | 1 => bot | 2 => left | 3 => right
+			; when we can't, we choose the inverse
+			; cmpa	#0
+			beq	game_generate_map_boat_top
+			cmpa	#1
+			beq	game_generate_map_boat_bot
+			cmpa	#2
+			beq	game_generate_map_boat_left
+			; cmpa	#3
+			; beq	game_generate_map_boat_right
+			bra	game_generate_map_boat_right
+
+; TODO: get better tag names
+
+game_generate_map_boat_top: ; decrement a coord
+			pulu	a
+			cmpa	#0; if we cant decrement it, increment it
+			beq	game_generate_map_boat_bot_redirect
+game_generate_map_boat_top_redirect:
+			deca
+			bra	game_generate_map_boat_end
+
+game_generate_map_boat_bot: ; increment a coord
+			pulu	a
+			cmpa	#7
+			beq	game_generate_map_boat_top_redirect
+game_generate_map_boat_bot_redirect:
+			inca
+			bra	game_generate_map_boat_end
+
+game_generate_map_boat_left:
+			pulu	a
+			cmpb	#0
+			beq	game_generate_map_boat_right_redirect
+game_generate_map_boat_left_redirect:
+			decb
+			bra	game_generate_map_boat_end
+
+game_generate_map_boat_right:
+			pulu	a
+			cmpb	#7
+			beq	game_generate_map_boat_left_redirect
+game_generate_map_boat_right_redirect:
+			incb
+			; bra	game_generate_map_boat_end
+
+game_generate_map_boat_end:
+			; here we have the two coords of the new boat part
+			ldx	#FIELD
+			jsr	game_shoot
+			pulu	b
+			bra	game_generate_map_boat
+
+game_generate_map_end:
+			pulu	a,b,x
 			rts
 
 ;   +--------------------------------------------+
@@ -287,11 +377,12 @@ game_print_map_current:
 ;   +--------------------------------------------+
 ;   | @param a x coord                           |
 ;   | @param b y coord                           |
+;   | @param x map direction                     |
 ;   +--------------------------------------------+
 game_shoot:
 			pshu	a,b,x
 
-			ldx	#USER_FIELD ; get the map
+			; ldx	#USER_FIELD ; get the map
 			jsr	int_to_mask ; generate the correct mask
 
 
@@ -315,6 +406,7 @@ game_shoot:
 ;   +--------------------------------------------+
 game_ask:
 			pshu	x
+game_ask_start:
 			ldx	#GAME_ASK_STR
 			jsr	print
 
@@ -322,22 +414,39 @@ game_ask:
 			ldx	#GAME_ANSWER
 			jsr	lreads
 
-			ldb	#0 ; load in a  the firs char
-			lda	b, x
+			lda	0, x ; load the first char in a
 
-			cmpa	#'q ; if first char is `q`, we return
+			; if first char is `q`, we return
+			cmpa	#'q
 			beq	game_ask_error
 			cmpa	#'Q
 			beq	game_ask_error
 
-			; assume its uppercase (between 65 and 72)
-			; TODO: validate: not required since a bad letter makes you shoot nowhere
-			suba	#65 ; 'A'
+			; validation
+			cmpa	#'A
+			blt	game_ask_start
+			cmpa	#'H
+			bgt	game_ask_check_lower ; if it's bigger than 'H' it might be a lowercase letter
+			suba	#'A
+			bra	game_ask_number ; if not, we're done, check the number
 
-			ldb	#1
-			ldb	b,x
-			; fist square is '1' not '0'
+game_ask_check_lower:
+			cmpa	#'a
+			blt	game_ask_start
+			cmpa	#'h
+			bgt	game_ask_start
+			suba	#'a
+game_ask_number:
+			ldb	1,x ; load the second char in b
+
+			; validation
+			cmpa	'1
+			blt	game_ask_start
+			cmpb	'8
+			bgt	game_ask_start
+
 			subb	#'1
+
 			bra	game_ask_end
 game_ask_error:
 			lda	#-1
