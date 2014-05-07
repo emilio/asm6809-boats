@@ -22,8 +22,8 @@ RAND_LAST:		.byte	0x01
 ; Must be 2^n - 1 (so mod gets achieved with AND)
 RAND_MAX:		.byte	0xFF
 ; A == 2 (así podemos usar rol para multiplicar)
-; A == 1
-; RAND_A:			.byte	234
+; A == 4
+; RAND_A:			.byte	233
 RAND_C:			.byte	0x03
 
 ;   +--------------------------------------------+
@@ -36,7 +36,11 @@ RAND_C:			.byte	0x03
 rand:
 			; xn * A + c
 			lda	RAND_LAST
-			; rola
+
+			; A = 1
+;			lsla
+;			lsla
+
 			adda	RAND_C
 
 			; % m
