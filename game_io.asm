@@ -416,6 +416,7 @@ game_ask_start:
 
 			lda	0, x ; load the first char in a
 
+game_ask_debug: ; just for debugging purposes
 			; if first char is `q`, we return
 			cmpa	#'q
 			beq	game_ask_error
@@ -424,26 +425,26 @@ game_ask_start:
 
 			; validation
 			cmpa	#'A
-			blt	game_ask_start
+			blo	game_ask_start
 			cmpa	#'H
-			bgt	game_ask_check_lower ; if it's bigger than 'H' it might be a lowercase letter
+			bhi	game_ask_check_lower ; if it's bigger than 'H' it might be a lowercase letter
 			suba	#'A
 			bra	game_ask_number ; if not, we're done, check the number
 
 game_ask_check_lower:
 			cmpa	#'a
-			blt	game_ask_start
+			blo	game_ask_start
 			cmpa	#'h
-			bgt	game_ask_start
+			bhi	game_ask_start
 			suba	#'a
 game_ask_number:
 			ldb	1,x ; load the second char in b
 
-			; validation
-			cmpa	'1
-			blt	game_ask_start
-			cmpb	'8
-			bgt	game_ask_start
+			; WHY THE FUCK THIS DOESNT WORK?????
+			cmpb	#'1
+			blo	game_ask_start
+			cmpb	#'8
+			bhi	game_ask_start
 
 			subb	#'1
 

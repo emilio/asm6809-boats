@@ -25,8 +25,8 @@ PROGRAM_END_CELL	.equ 0xFF01
 ; The field is 8x8
 ; Since it just has two states, with 64 bits we have the whole field!
 FIELD:
-;   		.byte 0
-			.byte 3 ; for testing: one boat in the top right corner
+			;.byte 3 ; for testing: one boat in the top right corner
+			.byte 0
 			.byte 0
 			.byte 0
 			.byte 0
