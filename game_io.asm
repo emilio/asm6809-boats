@@ -11,6 +11,7 @@
 			.globl	game_ask
 			.globl	game_shoot
 			.globl	game_is_solved
+			.globl	game_reset_shoot_count
 			.globl	game_solved
 			.globl	game_surrender
 			.globl	FIELD
@@ -517,6 +518,18 @@ game_print_shoot_count:
 			pulu	a
 			rts
 
+
+;   +--------------------------------------------+
+;   |            game_reset_shoot_count          |
+;   +--------------------------------------------+
+;   | Reset the shoot count                      |
+;   +--------------------------------------------+
+game_reset_shoot_count:
+			pulu	a
+			lda	#0
+			sta	GAME_SHOOT_COUNT
+			pshu	a
+			rts
 ;   +--------------------------------------------+
 ;   |                 game_solved                |
 ;   +--------------------------------------------+
