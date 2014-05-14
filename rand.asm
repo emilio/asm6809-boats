@@ -24,7 +24,7 @@ RAND_MAX:		.byte	0xFF
 ; A == 2 (así podemos usar rol para multiplicar)
 ; A == 4
 ; RAND_A:			.byte	233
-RAND_C:			.byte	0x03
+RAND_C:			.byte	0x12
 
 ;   +--------------------------------------------+
 ;   |                    rand                    |
