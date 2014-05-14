@@ -51,7 +51,10 @@ PROGRAM_START:
 			ldu #0xFF00 ; init user stack
 			jsr presentation
 			jsr game_generate_map
-			jsr game_reset_shoot_count ; Reset the shoot count (this is a workaround, shouldnt increment when shooting to generate the map, but its easier than creating another subroutine)
+			; Reset the shoot count
+			; this is a workaround, shouldnt increment when shooting to generate the map
+			; but its easier than creating another subroutine
+			jsr game_reset_shoot_count
 			jsr game_loop
 
 PROGRAM_END:
