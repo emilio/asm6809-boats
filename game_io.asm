@@ -53,9 +53,33 @@ GAME_BOAT_CHAR:		.byte	#'x
 ;----------------+
 ;   READ-WRITE   |
 ;----------------+
+; The field is 8x8
+; Since it just has two states, with 64 bits we have the whole field!
+FIELD:
+			;.byte 3 ; for testing: one boat in the top right corner
+			.byte 0
+			.byte 0
+			.byte 0
+			.byte 0
+			.byte 0
+			.byte 0
+			.byte 0
+			.byte 0
+
+; If the user already checked a field then a `1` is stored here
+USER_FIELD:
+			.byte 0
+			.byte 0
+			.byte 0
+			.byte 0
+			.byte 0
+			.byte 0
+			.byte 0
+			.byte 0
+
 GAME_SHOOT_COUNT:	.byte 0
 
-; 3 bits for answer (q if quit, position if not)
+; 3 bytes for answer (q if quit, position if not)
 GAME_ANSWER:		.byte 0
 			.byte 0
 			.byte 0
