@@ -55,7 +55,8 @@ srand:
 
 usrand:
 			pshu	x,a
-			ldx	#USRAND_STR
+;			ldx	#USRAND_STR
+			leax	USRAND_STR,PCR
 			jsr	print
 			lda	STDIN
 			sta	RAND_LAST

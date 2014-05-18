@@ -109,7 +109,8 @@ game_generate_map:
 			jsr	usrand
 			; TODO: get number of boats & randomize them
 			pshu	a,b,x
-			ldx	#FIELD
+;			ldx	#FIELD
+			leax	FIELD,PCR
 			ldb	BOATS_NUM
 			incb
 
@@ -127,7 +128,8 @@ game_generate_map_boat:
 			jsr	rand ; now we keep it in a
 			anda	#0x07
 
-			ldx	#FIELD
+;			ldx	#FIELD
+			leax	FIELD,PCR
 			jsr	game_shoot
 
 ; for debugging
@@ -187,7 +189,8 @@ game_generate_map_boat_right_redirect:
 
 game_generate_map_boat_end:
 			; here we have the two coords of the new boat part
-			ldx	#FIELD
+;			ldx	#FIELD
+			leax	FIELD,PCR
 			jsr	game_shoot
 			pulu	b
 			bra	game_generate_map_boat
@@ -288,7 +291,8 @@ game_print_end:
 choose_char:
 			pshu	a,x
 
-			ldx	#FIELD
+;			ldx	#FIELD
+			leax	FIELD,PCR
 			lda	a, x
 			bita	TEMP_BYTE
 
@@ -318,7 +322,8 @@ choose_char_end:
 choose_uchar:
 			pshu	a,x
 			; load the user map row in a
-			ldx	#USER_FIELD
+;			ldx	#USER_FIELD
+			leax	USER_FIELD,PCR
 			ldb	a, x
 
 			; apply the mask (deactivate all the bits except the interesting one)
@@ -326,7 +331,8 @@ choose_uchar:
 
 			beq	choose_uchar_unknown
 
-			ldx	#FIELD
+;			ldx	#FIELD
+			leax	FIELD,PCR
 			ldb	a, x
 			bitb	TEMP_BYTE
 
@@ -408,11 +414,13 @@ game_shoot:
 game_ask:
 			pshu	x
 game_ask_start:
-			ldx	#GAME_ASK_STR
+;			ldx	#GAME_ASK_STR
+			leax	GAME_ASK_STR,PCR
 			jsr	print
 
 			lda	#3 ; we want 3 chars (two plus \0)
-			ldx	#GAME_ANSWER
+;			ldx	#GAME_ANSWER
+			leax	GAME_ANSWER,PCR
 			jsr	lreads
 
 			lda	0, x ; load the first char in a
@@ -480,8 +488,10 @@ game_is_solved:
 			; }
 			; return 0;
 			lda	#8
-			ldx	#FIELD
-			ldy	#USER_FIELD
+;			ldx	#FIELD
+			leax	FIELD,PCR
+;			ldy	#USER_FIELD
+			leay	USER_FIELD,PCR
 game_is_solved_loop:
 			cmpa	#0
 			beq	game_is_solved_end
@@ -505,14 +515,16 @@ game_is_solved_end:
 game_print_shoot_count:
 			pshu	a
 
-			ldx	#GAME_SHOOT_COUNT_BEFORE_STR
+;			ldx	#GAME_SHOOT_COUNT_BEFORE_STR
+			leax	GAME_SHOOT_COUNT_BEFORE_STR,PCR
 			jsr	print
 
 			lda	GAME_SHOOT_COUNT
 			adda	#'0
 			sta	STDOUT
 
-			ldx	#GAME_SHOOT_COUNT_AFTER_STR
+;			ldx	#GAME_SHOOT_COUNT_AFTER_STR
+			leax	GAME_SHOOT_COUNT_AFTER_STR,PCR
 			jsr	print
 
 			pulu	a
@@ -538,7 +550,8 @@ game_reset_shoot_count:
 game_solved:
 			jsr	game_print_map_solved
 
-			ldx	#GAME_SOLVED_STR
+;			ldx	#GAME_SOLVED_STR
+			leax	GAME_SOLVED_STR,PCR
 			jsr	print
 			jsr	game_print_shoot_count
 			rts
@@ -550,7 +563,8 @@ game_solved:
 ;   +--------------------------------------------+
 game_surrender:
 			jsr	game_print_map_solved
-			ldx	#GAME_SURRENDER_STR
+;			ldx	#GAME_SURRENDER_STR
+			leax	GAME_SURRENDER_STR,PCR
 			jsr	print
 			jsr	game_print_shoot_count
 			rts

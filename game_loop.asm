@@ -32,7 +32,7 @@ game_loop:
 			beq	game_loop_surrender
 
 			; else we shoot and continue the loop
-			ldx	#USER_FIELD
+			leax	USER_FIELD,PCR
 			jsr	game_shoot
 
 			; TODO: check and print status (return from game_shoot)

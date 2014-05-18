@@ -15,7 +15,13 @@
 ; NO PUEDO ESCRIBIR puntoASCIZ EN COMENTARIOS? EN SERIO?
 ; Cuando la cadena sobrepasa cierta longitud (64 bits) `asciz` da una violación de segmento<
 presentation_str:
-			.ascii "\tHundir la flota\t\n------------------------------\n  Emilio Cobos (70912324-N)\n"
+			.ascii "+----------------------------------------------------------+\n"
+			.ascii "|                          Hundir la flota                 |\n"
+			.ascii "+-----------------------+----------------------+-----------+\n"
+			.ascii "| Emilio Cobos Alvarez  | emiliocobos@usal.es  | 70912324N |\n"
+			.ascii "| Eduardo Alonso Robles | edualorobles@usal.es | 70901036V |\n"
+			.ascii "+-----------------------+----------------------+-----------+\n"
+			.ascii "\n\n"
 			.byte 0
 
 
@@ -23,6 +29,7 @@ presentation_str:
 ;   SIMPLE ENOUGH, ISN'T IT?   |
 ;------------------------------+
 presentation:
-			ldx	#presentation_str
+;			ldx	#presentation_str
+			leax	presentation_str,PCR
 			jsr	print
 			rts
