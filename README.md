@@ -54,9 +54,9 @@ En un principio creí que implementarlo así sería beneficioso para el uso de m
 
 Visto con perspectiva esto aumenta la dificultad de ciertos aspectos del juego (aumentando ciclos de reloj a la hora de disparar, por ejemplo).
 
-El dilema es: *¿Es esa optimización en el uso de la memoria suficientemente grande para justificar el cambio?*
+El dilema es: **¿Es esa optimización en el uso de la memoria suficientemente grande para justificar el cambio?**
 
-Visto con perspectiva, la respuesta es *NO, salvo que estuvieramos super apurados con la memoria* (con un par de cadenas ascii ya te has comido los 48 bytes que te ahorras).
+Visto con perspectiva, la respuesta es **NO, salvo que estuvieramos super apurados con la memoria** (con un par de cadenas ascii ya te has comido los 48 bytes que te ahorras).
 
 No obstante más como reto que como otra cosa seguí con el desarrollo de esta manera.
 
