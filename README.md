@@ -3,6 +3,11 @@ Hundir la flota
 
 Juego de los barquitos en ensamblador, para computadores II
 
+## Autores
+
+* **Emilio Cobos Álvarez** <emiliocobos@usal.es> (70912324-N)
+* **Eduardo Alonso Robles** <edualorobles@usal.es> (70901036-V)
+
 ## Estructura
 
 El juego está dividido en seis archivos imprescindibles:
