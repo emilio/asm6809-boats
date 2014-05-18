@@ -473,7 +473,6 @@ game_ask_check_lower:
 game_ask_number:
 			ldb	1,x ; load the second char in b
 
-			; WHY THE FUCK THIS DOESNT WORK?????
 			cmpb	#'1
 			blo	game_ask_start
 			cmpb	#'8
