@@ -9,6 +9,7 @@
 			.module IO
 			.globl  print
 			.globl  puts
+			.globl	print_hex
 			.globl  reads
 			.globl  lreads
 			.globl	STDIN
@@ -68,6 +69,61 @@ puts_end:
 			lda	INPUT_END
 			sta	STDOUT
 			pulu	a, x
+			rts
+
+;   +--------------------------------------------+
+;   |                print_hex_letter            |
+;   +--------------------------------------------+
+;   | Prints the hex letter corresponding to the |
+;   | register a                                 |
+;   |                                            |
+;   | a must be between 0 and 15                 |
+;   +--------------------------------------------+
+;   | @param a                                   |
+;   +--------------------------------------------+
+print_hex_letter:
+			pshu	a
+			adda	#'0
+			cmpa	#'9
+			bge	print_hex_letter_letter
+			bra	print_hex_letter_end
+print_hex_letter_letter:
+			adda	#7 ; distance from '9' to 'A' - 1
+			
+print_hex_letter_end:
+			sta	STDOUT
+			pulu	a
+			rts
+
+;   +--------------------------------------------+
+;   |                print_hex                   |
+;   +--------------------------------------------+
+;   | Prints number in hexa                      |
+;   +--------------------------------------------+
+;   | @param a                                   |
+;   +--------------------------------------------+
+print_hex:
+			pshu	a,b
+			pshu	a
+
+			ldb	#'0
+			stb	STDOUT
+			ldb	#'x
+			stb	STDOUT
+
+			anda	#0xF0
+			lsra
+			lsra
+			lsra
+			lsra
+			jsr	print_hex_letter
+
+			pulu	a
+
+			anda	#0x0F
+			jsr	print_hex_letter
+
+			pulu	a,b
 			rts
 
 ;   +--------------------------------------------+

@@ -22,6 +22,7 @@
 			.globl	STDOUT
 			.globl	usrand
 			.globl	rand
+			.globl	print_hex
 
 
 ;---------------+
@@ -107,7 +108,7 @@ int_to_mask:
 			stb	TEMP_BYTE
 			suba	TEMP_BYTE
 
-			; we loop `b` times multiplying b * 2
+			; we loop `a` times multiplying b * 2
 			; (shifting the byte to the left)
 			ldb	#1
 int_to_mask_loop:
@@ -544,8 +545,7 @@ game_print_shoot_count:
 			jsr	print
 
 			lda	GAME_SHOOT_COUNT
-			adda	#'0
-			sta	STDOUT
+			jsr	print_hex
 
 ;			ldx	#GAME_SHOOT_COUNT_AFTER_STR
 			leax	GAME_SHOOT_COUNT_AFTER_STR,PCR
