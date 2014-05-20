@@ -6,8 +6,6 @@
 
 
 			.module IO
-			.globl  putchara
-			.globl  putcharb
 			.globl  print
 			.globl  puts
 			.globl  reads
