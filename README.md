@@ -55,7 +55,7 @@ USER_FIELD:
 
 #### ¿El motivo?
 
-En un principio creí que implementarlo así sería beneficioso para el uso de memoria (reduce el mapa a 16 bytes en lugar de los 64 que requeriría la implementación más _predecible_).
+En un principio creimos que implementarlo así sería beneficioso para el uso de memoria (reduce el mapa a 16 bytes en lugar de los 64 que requeriría la implementación más _predecible_).
 
 Visto con perspectiva esto aumenta la dificultad de ciertos aspectos del juego (aumentando ciclos de reloj a la hora de disparar, por ejemplo).
 
@@ -63,15 +63,15 @@ El dilema es: **¿Es esa optimización en el uso de la memoria suficientemente g
 
 Visto con perspectiva, la respuesta es **NO, salvo que estuvieramos super apurados con la memoria** (con un par de cadenas ascii ya te has comido los 48 bytes que te ahorras).
 
-No obstante más como reto que como otra cosa seguí con el desarrollo de esta manera.
+No obstante más como reto que como otra cosa seguimos con el desarrollo de esta manera.
 
 ### Tiempo de desarrollo
 
-No llevo una cuenta exacta de las horas que le he dedicado a este jueguecito (la mayoría, sobre todo al principio, a juzgar por el historial de commits que puedes con `git log master`, han sido horas de insomnio de madrugada).
+No llevamos una cuenta exacta de las horas que le hemos dedicado a este jueguecito (la mayoría, sobre todo al principio, a juzgar por el historial de commits que puedes con `git log master`, han sido horas de insomnio de madrugada).
 
 ### Subrutinas destacadas
 
-Ésta es (para mí) la lista de subrutinas de más difícil entendimiento:
+Ésta es (para nosotros) la lista de subrutinas de más difícil entendimiento:
 
 * `int_to_mask`: Genera una máscara con un sólo bit activo y la almacena en `TEMP_BYTE`. El bit activo depende del valor del registro `B`, siendo `B` un número del 0 al 7, indicando la cordenada `y` del mapa. Para el caso, genera (2^(7-b))
 * `game_print_map`: Imprime el mapa.
@@ -81,4 +81,4 @@ No llevo una cuenta exacta de las horas que le he dedicado a este jueguecito (la
 
 ## Más curiosidades/dudas?
 
-He procurado ser exhaustivo en la documentación del código, así que sólo tienes que echar un vistazo.
+Hemos procurado ser exhaustivos en la documentación del código, así que sólo tienes que echar un vistazo.
