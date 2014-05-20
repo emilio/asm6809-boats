@@ -1,8 +1,9 @@
-;   +--------------------------------------------+
-;   |            RANDOM NUMBER GENERATOR         |
-;   +--------------------------------------------+
-;   | Emilio Cobos <emiliocobos@usal.es>         |
-;   +--------------------------------------------+
+;   +------------------------------------------------------+
+;   |                 RANDOM NUMBER GENERATOR              |
+;   +------------------------------------------------------+
+;   | @author Emilio Cobos <emiliocobos@usal.es>           |
+;   | @author Eduardo Alonso Robles <edualorobles@usal.es> |
+;   +------------------------------------------------------+
 			.module	flota_random
 			.globl	rand
 			.globl	srand

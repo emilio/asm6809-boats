@@ -1,8 +1,9 @@
-;   +--------------------------------------------+
-;   |          INPUT OUTPUT SUBROUTINES          |
-;   +--------------------------------------------+
-;   | @author Emilio Cobos <emiliocobos@usal.es> |
-;   +--------------------------------------------+
+;   +------------------------------------------------------+
+;   |          INPUT OUTPUT SUBROUTINES                    |
+;   +------------------------------------------------------+
+;   | @author Emilio Cobos <emiliocobos@usal.es>           |
+;   | @author Eduardo Alonso Robles <edualorobles@usal.es> |
+;   +------------------------------------------------------+
 
 
 			.module IO
