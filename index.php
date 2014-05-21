@@ -173,10 +173,18 @@ pre[class*="language-"] {
 	</style>
 </head>
 <body>
+	<?php $files = ['main', 'presentation', 'game_loop', 'game_io', 'rand', 'IO', 'rand_test']; ?>
 	<div class="content">
-		<?php foreach (['main', 'presentation', 'game_io', 'game_loop', 'rand'] as $file): ?>
-			<h1><?= $file ?>.asm</h1>
+		<h1 id="TOC">Contenidos</h1>
+		<ul >
+			<?php foreach ($files as $file): ?>
+				<li><a href="#<?= $file ?>"><?= $file ?>.asm</a></li>
+			<?php endforeach; ?>
+		</ul>
+		<?php foreach ($files as $file): ?>
+			<h2 id="<?= $file ?>"><?= $file ?>.asm</h2>
 			<pre data-language="asm" class="language-asm"><code><?= htmlspecialchars(file_get_contents($file . '.asm')); ?></code></pre>
+			<a href="#TOC">Volver arriba</a>
 		<?php endforeach; ?>
 	</div>
 <script type="text/javascript">
